@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CetTodoApp.MainPage">
+             x:Class="TodoApp_Nihal.MainPage">
 
     <VerticalStackLayout Padding="20" Margin="20">
 
         <Border Margin="20">
             <VerticalStackLayout Margin="10" Padding="10">
-                <Entry x:Name="Title" Placeholder="Enter a todo Item" />
+                <Entry x:Name="Title"
+                       Placeholder="Enter a todo item" />
 
                 <HorizontalStackLayout Padding="20" Margin="10">
                     <Label Text="Due Date :" VerticalOptions="Center" />
-                    <DatePicker x:Name="DueDate" VerticalOptions="Center" />
+                    <DatePicker x:Name="DueDate"
+                                VerticalOptions="Center" />
                 </HorizontalStackLayout>
 
                 <Button x:Name="AddButton"
@@ -27,7 +29,8 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Orientation="Horizontal" Padding="5">
+                        <StackLayout Orientation="Horizontal"
+                                     Padding="5" Spacing="8">
 
                             <Label Text="{Binding Title}"
                                    VerticalOptions="Center">
@@ -60,6 +63,7 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
+
         </ListView>
 
     </VerticalStackLayout>
