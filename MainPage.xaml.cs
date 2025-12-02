@@ -1,19 +1,20 @@
-using CetTodoApp.Data;
+using TodoApp_Nihal.Data;
 
-namespace CetTodoApp;
+namespace TodoApp_Nihal;
 
 public partial class MainPage : ContentPage
 {
-    private ToDoDB db = new ToDoDB();
-
     public MainPage()
     {
         InitializeComponent();
+
+        DueDate.Date = DateTime.Today;
         RefreshListView();
     }
 
     private async void AddButton_OnClicked(object? sender, EventArgs e)
     {
+
         if (string.IsNullOrWhiteSpace(Title.Text))
         {
             await DisplayAlert("Validation", "Please enter a title.", "OK");
@@ -27,29 +28,30 @@ public partial class MainPage : ContentPage
         }
 
 
-        await db.CreateAsync(Title.Text.Trim(), DueDate.Date);
+        FakeDb.AddToDo(Title.Text.Trim(), DueDate.Date);
 
         Title.Text = string.Empty;
         DueDate.Date = DateTime.Today;
 
-        await RefreshListView();
+        RefreshListView();
     }
 
-    private async Task RefreshListView()
+    private void RefreshListView()
     {
         TasksListView.ItemsSource = null;
-        TasksListView.ItemsSource = await db.GetAllAsync();
+        TasksListView.ItemsSource = FakeDb
+            .GetAll()
+            .ToList();
     }
 
-    private async void TasksListView_OnItemSelected(object? sender, SelectedItemChangedEventArgs e)
+    private void TasksListView_OnItemSelected(object? sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem is not TodoItem item)
             return;
 
-        await db.TogleCompletionStatusAync(item);
+        FakeDb.ToggleCompletionStatus(item);
 
         TasksListView.SelectedItem = null;
-
-        await RefreshListView();
+        RefreshListView();
     }
 }
