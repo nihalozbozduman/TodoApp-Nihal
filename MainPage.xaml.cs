@@ -4,12 +4,14 @@ namespace TodoApp_Nihal;
 
 public partial class MainPage : ContentPage
 {
+    private readonly ToDoDB _db = new ToDoDB();
+
     public MainPage()
     {
         InitializeComponent();
 
         DueDate.Date = DateTime.Today;
-        RefreshListView();
+        _ = RefreshListView();
     }
 
     private async void AddButton_OnClicked(object? sender, EventArgs e)
@@ -28,30 +30,29 @@ public partial class MainPage : ContentPage
         }
 
 
-        FakeDb.AddToDo(Title.Text.Trim(), DueDate.Date);
+        await _db.CreateAsync(Title.Text.Trim(), DueDate.Date);
 
         Title.Text = string.Empty;
         DueDate.Date = DateTime.Today;
 
-        RefreshListView();
+        await RefreshListView();
     }
 
-    private void RefreshListView()
+    private async Task RefreshListView()
     {
         TasksListView.ItemsSource = null;
-        TasksListView.ItemsSource = FakeDb
-            .GetAll()
-            .ToList();
+        TasksListView.ItemsSource = await _db.GetAllAsync();
     }
 
-    private void TasksListView_OnItemSelected(object? sender, SelectedItemChangedEventArgs e)
+    private async void TasksListView_OnItemSelected(object? sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem is not TodoItem item)
             return;
 
-        FakeDb.ToggleCompletionStatus(item);
+        await _db.TogleCompletionStatusAync(item);
 
         TasksListView.SelectedItem = null;
-        RefreshListView();
+
+        await RefreshListView();
     }
 }
